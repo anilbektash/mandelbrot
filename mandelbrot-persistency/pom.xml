@@ -1,0 +1,158 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.semantica.mandelbrot</groupId>
+	<artifactId>mandelbrot-persistency</artifactId>
+	<version>0.0.1</version>
+	<name>mandelbrot-persistency</name>
+	<description>Mandelbrot Persistency Layer</description>
+
+	<properties>
+		<environment>dev</environment>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>${environment}</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+		<filters>
+			<filter>src/main/resources/db-${environment}.properties</filter>
+		</filters>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<environment>prod</environment>
+			</properties>
+		</profile>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<environment>dev</environment>
+			</properties>
+		</profile>
+	</profiles>
+
+	<developers>
+		<developer>
+			<name>Tugcem Oral</name>
+			<email>tugcem.oral@gmail.com</email>
+			<organization>Semantica Inc.</organization>
+		</developer>
+	</developers>
+
+	<dependencies>
+
+		<!-- mongodb driver dependency -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>2.11.4</version>
+		</dependency>
+
+		<!-- spring dependencies -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.4.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>3.2.8.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>3.2.8.RELEASE</version>
+		</dependency>
+
+		<!-- utility based dependencies -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<!-- logger dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.6</version>
+		</dependency>
+
+		<!-- test scoped dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.2.8.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+</project>

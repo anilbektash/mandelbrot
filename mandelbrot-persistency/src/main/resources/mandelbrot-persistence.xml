@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="mongoPropertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:db-${environment}.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<mongo:mongo host="${mongo.host.name}" port="${mongo.host.port}" />
+	<mongo:db-factory id="mongoDbFactory" dbname="${mongo.db.name}"
+		mongo-ref="mongo" />
+	<mongo:mapping-converter id="converter" />
+
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"
+		c:mongo-ref="mongo" c:databaseName="${mongo.db.name}">
+		<property name="writeConcern">
+			<util:constant static-field="com.mongodb.WriteConcern.SAFE" />
+		</property>
+	</bean>
+
+	<bean name="gridFsTemplate"
+		class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+		<constructor-arg ref="mongoDbFactory" />
+		<constructor-arg ref="converter" />
+	</bean>
+
+	<context:component-scan
+		base-package="com.semantica.mandelbrot.persistence.repository" />
+
+</beans>
